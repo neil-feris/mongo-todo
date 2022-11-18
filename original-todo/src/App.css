@@ -1,0 +1,33 @@
+/* import google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Crete+Round&family=Felipa&family=Frank+Ruhl+Libre&display=swap');
+
+body { 
+  /* default styling */
+  font-family: 'Frank Ruhl', serif;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: #333;
+  background-color: #fafafa;
+}
+
+h1 {
+  font-family: 'Felipa', cursive;
+  font-size: 3em;
+  color: #fff;
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+p {
+  font-family: 'Crete Round', serif;
+  font-size: 1.25em;
+  color: #fff;
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+.delete { /* Style the delete button */
+  font-size: 0.5rem;
+  /* Superscript */
+  vertical-align: super;
+}
