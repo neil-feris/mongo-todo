@@ -1,7 +1,5 @@
 // logic for login
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
 
 export const login = async (req, res) => {
   // get the username and password from the request body
@@ -13,6 +11,7 @@ export const login = async (req, res) => {
     // create a token that is valid for 1 hour
     const token = jwt.sign({ username }, process.env.JWT_SECRET, {
       expiresIn: "1h",
+      algorithm: "HS256",
     });
     res.status(200).json({ token }); // return the token as json
   } else {
@@ -20,4 +19,3 @@ export const login = async (req, res) => {
     res.status(401).json({ error: "Invalid username or password" });
   }
 };
-
