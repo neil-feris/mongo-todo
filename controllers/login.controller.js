@@ -7,7 +7,7 @@ export const login = async (req, res) => {
   console.log(username, password);
 
   // check if the username and password are correct
-  if (username === "admin" && password === "admin") {
+  if (username === "Neil Feris" && password === "admin") {
     // create a token that is valid for 1 hour
     const token = jwt.sign({ username }, process.env.JWT_SECRET, {
       expiresIn: "1h",
