@@ -6,6 +6,8 @@ import cors from "cors";
 import todosRoute from "./routes/todo.route.js";
 // import login route
 import loginRoute from "./routes/login.route.js";
+// import signup route
+import signupRoute from "./routes/signup.route.js";
 
 const app = express();
 
@@ -16,7 +18,8 @@ app.use(express.json());
 
 // setup routes anything that doesn't match the routes specified will send a 404
 app.use("/api/todos", todosRoute);
-app.use("/login", loginRoute);
+app.use("/api/login", loginRoute);
+app.use("/api/signup", signupRoute);
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));
 
 export default app;

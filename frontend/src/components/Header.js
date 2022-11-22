@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -19,17 +20,42 @@ import CloseIcon from "@mui/icons-material/Close";
 
 // return MUI AppBar component with title centered
 const Header = () => {
-  const [open, setOpen] = React.useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [openSnackBar, setOpenSnackBar] = React.useState(true); // for Snackbar
+  const [openAlert, setOpenAlert] = React.useState(true); // for Alert
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    if (loggedIn) {
+      // setLoggedIn(false);
+      sessionStorage.removeItem("token"); // remove token from session storage
+      console.log("navigate to login page", loggedIn);
+      navigate("/login");
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <div className="header">
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h4" component="div">
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             What to DO?
           </Typography>
+          {/* if loggedIn */}
+          {loggedIn ? (
+            <Button color="inherit" onClick={handleLogin}>
+              Login
+            </Button>
+          ) : (
+            <Button color="inherit" onClick={handleLogin}>
+              Logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
-      <Fade in={open} easing="ease-in" timeout={300}>
+      <Fade in={openAlert} easing="ease-in" timeout={300}>
         <Alert
           variant="filled"
           severity="info"
@@ -39,7 +65,7 @@ const Header = () => {
               color="inherit"
               size="small"
               onClick={() => {
-                setOpen(false);
+                setOpenAlert(false);
               }}
             >
               <CloseIcon fontSize="inherit" />
@@ -50,23 +76,23 @@ const Header = () => {
           This is a demo app for <strong>What to DO?</strong>
         </Alert>
       </Fade>
-      <Button variant="contained" onClick={() => setOpen(true)}>
-        Reopen
-      </Button>
+
       <Snackbar
-        open={open}
+        open={openSnackBar}
         autoHideDuration={6000}
-        onClose={() => setOpen(false)}
+        onClose={() => setOpenSnackBar(false)}
       >
         <Alert
-          onClose={() => setOpen(false)}
+          onClose={() => setOpenSnackBar(false)}
           severity="info"
           sx={{ width: "100%" }}
         >
           This is a demo app for <strong>What to DO?</strong>
         </Alert>
       </Snackbar>
-      
+      <Button variant="contained" onClick={() => setOpenSnackBar(true)}>
+        Reopen
+      </Button>
     </div>
   );
 };
