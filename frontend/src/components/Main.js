@@ -11,6 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import TodoList from "./TodoList";
+
 export default function Main() {
   const [todos, setTodos] = useState([]);
   const [errors, setErrors] = useState(null);
@@ -41,32 +43,28 @@ export default function Main() {
   // if it is, render the TodoList component
   return (
     <Container>
-      <Typography variant="h1">Todo List</Typography>
-      <Box>
+      <Typography variant="h1" textAlign={"center"}>Your Todo List</Typography>
+      <Box sx={{display:"flex", alignItems:"center", justifyContent: "center"}}>
         <form>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                fullWidth
+                
                 label="Add a todo"
                 name="todo"
                 variant="outlined"
               />
             </Grid>
             <Grid item xs={12}>
-              <Button color="primary" fullWidth type="submit" variant="contained">
+              <Button size="small" color="primary"  type="submit" variant="contained">
                 Add Todo
               </Button>
             </Grid>
           </Grid>
         </form>
       </Box>
-      <Box>
-        <ul>
-          {todos.map((todo) => (
-            <li key={todo.id}>{todo.todo}</li>
-          ))}
-        </ul>
+      <Box sx={{display:"flex", alignItems:"center", justifyContent: "center"}}>
+        { todos && <TodoList todos={todos} /> }
       </Box>
     </Container>
   );
