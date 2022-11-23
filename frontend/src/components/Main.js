@@ -35,7 +35,6 @@ export default function Main() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("data: ", data);
         setTodos(data);
       });
   }, []);
@@ -43,28 +42,34 @@ export default function Main() {
   // if it is, render the TodoList component
   return (
     <Container>
-      <Typography variant="h1" textAlign={"center"}>Your Todo List</Typography>
-      <Box sx={{display:"flex", alignItems:"center", justifyContent: "center"}}>
+      <Typography variant="h1" textAlign={"center"}>
+        Your Todo List
+      </Typography>
+      <Box
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
         <form>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                
-                label="Add a todo"
-                name="todo"
-                variant="outlined"
-              />
+              <TextField label="Add a todo" name="todo" variant="outlined" />
             </Grid>
             <Grid item xs={12}>
-              <Button size="small" color="primary"  type="submit" variant="contained">
+              <Button
+                size="small"
+                color="primary"
+                type="submit"
+                variant="contained"
+              >
                 Add Todo
               </Button>
             </Grid>
           </Grid>
         </form>
       </Box>
-      <Box sx={{display:"flex", alignItems:"center", justifyContent: "center"}}>
-        { todos && <TodoList todos={todos} /> }
+      <Box
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        {todos && <TodoList todos={todos} />}
       </Box>
     </Container>
   );

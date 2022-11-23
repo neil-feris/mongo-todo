@@ -15,9 +15,7 @@ export const login = async (req, res) => {
   // if the user exists
   if (user) {
     // create a token
-    const token = jwt.sign({ username }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ username }, process.env.JWT_SECRET);
     // return the token
     res.status(200).json({ token });
   }
