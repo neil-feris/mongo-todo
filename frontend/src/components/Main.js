@@ -15,18 +15,20 @@ import TodoList from "./TodoList";
 
 export default function Main() {
   const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState("");
   const [errors, setErrors] = useState(null);
 
   // check if token is in local storage
   const token = sessionStorage.getItem("token");
-  // if it is not, redirect to login page
-
-  // if (!token) {
-  //   // render link to login page
-  //   return <Navigate to="/login" />;
-  // }
-
+  
+  
   useEffect(() => {
+    // check if token is in local storage
+    // if it is not, redirect to login page
+    if (!token) {
+      // render link to login page
+      return <Navigate to="/login" />;
+    }
     // fetch the todo list from the backend
     fetch("/api/todos", {
       headers: {
@@ -37,7 +39,36 @@ export default function Main() {
       .then((data) => {
         setTodos(data);
       });
-  }, []);
+  }, [todos]);
+
+  const handleAddTodo = (e) => {
+    e.preventDefault();
+    // if the todo is empty, return
+    if (!newTodo) return;
+    // send a POST request to the backend to add a new todo
+    fetch("/api/todos/add/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({ todo: newTodo }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // data is the new todo
+        if (data.errors) {
+          setErrors(data.errors);
+        } else {
+          setTodos([...todos, data]);
+          setNewTodo("");
+        }
+      });
+  };
+
+  const handleChange = (e) => {
+    setNewTodo(e.target.value);
+  };
 
   // if it is, render the TodoList component
   return (
@@ -50,15 +81,22 @@ export default function Main() {
       >
         <form>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField label="Add a todo" name="todo" variant="outlined" />
-            </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ mb: 2 }}>
+              <TextField
+                label="Add a todo"
+                name="addTodo"
+                value={newTodo}
+                onChange={handleChange}
+                onSubmit={handleAddTodo}
+                variant="outlined"
+              />
               <Button
-                size="small"
+                sx={{ ml: 2, mt: 1 }}
                 color="primary"
+                size="large"
                 type="submit"
                 variant="contained"
+                onClick={handleAddTodo}
               >
                 Add Todo
               </Button>

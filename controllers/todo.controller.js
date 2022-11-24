@@ -32,6 +32,7 @@ export const addTodo = async (req, res) => {
     const todo = new Todo({
       todo: req.body.todo,
       author: decoded.username,
+      completed: false,
     });
     // save the todo to the database
     await todo.save();
