@@ -1,4 +1,5 @@
 // logic for login
+// import jwt for token generation and validation
 import jwt from "jsonwebtoken";
 
 // import User model
@@ -7,7 +8,6 @@ import User from "../models/user.model.js";
 export const login = async (req, res) => {
   // get the username and password from the request body
   const { username, password } = req.body;
-  console.log(username, password);
 
   // check if the username and password are correct from users database
   const user = await User.findOne({ username, password });

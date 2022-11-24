@@ -1,6 +1,7 @@
 // We set up all our logic in this file
-// import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken" to generate and validate tokens
 import jwt from "jsonwebtoken";
+
 // import the todo model
 import Todo from "../models/todo.model.js";
 

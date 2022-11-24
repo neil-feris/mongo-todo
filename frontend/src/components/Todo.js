@@ -1,3 +1,5 @@
+// Renders an individual todo using MUI list
+
 import React from "react";
 import {
   ListItem,
@@ -6,7 +8,10 @@ import {
   ListItemIcon,
   Divider,
   Snackbar,
+  Alert,
 } from "@mui/material";
+
+// icons from MUI
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -16,7 +21,7 @@ export function Todo({ todo }) {
   const [snackBarMessage, setSnackBarMessage] = React.useState(""); // for Snackbar
 
   const handleCloseSnackBar = () => {
-    setOpenSnackBar(false);
+    setOpenSnackBar(false); // close the snackbar
   };
 
   const handleCompleted = () => {
@@ -29,13 +34,14 @@ export function Todo({ todo }) {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify({ completed: !todo.completed }),
+      body: JSON.stringify({ completed: !todo.completed }), //toggle the completed state
     })
       .then((res) => res.json())
       .then((data) => {
         // update todo
         todo.completed = data.completed;
         setSnackBarMessage(
+          // set the snackbar message
           !data.completed ? "marked as completed!" : "marked as uncompleted!"
         );
         setOpenSnackBar(true);
@@ -55,13 +61,6 @@ export function Todo({ todo }) {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        // Show a snackbar
-        console.log(openSnackBar);
-        setSnackBarMessage(data.message);
-        setOpenSnackBar(true);
-        console.log(data, openSnackBar);
-      })
       .catch((err) => console.log(err));
   };
 
@@ -91,10 +90,12 @@ export function Todo({ todo }) {
       </ListItem>
       <Snackbar
         open={openSnackBar}
-        autoHideDuration={2000}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={1500}
         onClose={handleCloseSnackBar}
-        message={snackBarMessage}
-      />
+      >
+        <Alert severity="success">{snackBarMessage}</Alert>
+      </Snackbar>
     </>
   );
 }

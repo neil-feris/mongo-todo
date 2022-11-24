@@ -13,8 +13,8 @@ import {
 import TodoList from "./TodoList";
 
 export default function Main() {
-  const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState("");
+  const [todos, setTodos] = useState([]); // state to store todos
+  const [newTodo, setNewTodo] = useState(""); // state to store new todo
   const [errors, setErrors] = useState(null);
 
   // check if token is in local storage
@@ -33,7 +33,7 @@ export default function Main() {
           setTodos(data);
         });
     }
-  }, [todos]);
+  }, [todos, token]); // run the effect when todos or token changes
 
   const handleAddTodo = (e) => {
     e.preventDefault();
@@ -68,13 +68,13 @@ export default function Main() {
   };
 
   const handleChange = (e) => {
-    setNewTodo(e.target.value);
+    setNewTodo(e.target.value); // update the state with the new value
   };
 
   // if it is, render the TodoList component
   return (
     <Container>
-      <Typography variant="h1" textAlign={"center"}>
+      <Typography variant="h2" textAlign={"center"}>
         Your Todo List
       </Typography>
       <Box
@@ -86,7 +86,7 @@ export default function Main() {
               <TextField
                 label="Add a todo"
                 name="addTodo"
-                value={newTodo}
+                value={newTodo} // bind the value to the state
                 onChange={handleChange}
                 onSubmit={handleAddTodo}
                 variant="outlined"
@@ -108,12 +108,16 @@ export default function Main() {
       <Box
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        {token && todos && <TodoList todos={todos} />}
+        {
+          token && todos && (
+            <TodoList todos={todos} />
+          ) /* render the TodoList component if user is logged in and there are todos*/
+        }
       </Box>
       <Box
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        {errors && (
+        {errors /* show errors if there are any */ && (
           <Typography variant="h6" color="error">
             {errors}
           </Typography>

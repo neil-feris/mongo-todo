@@ -11,32 +11,37 @@ import {
   InputLabel,
   Input,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 export default function LoginSignUp() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(true); // state to check if user is logging in or signing up
   const [error, setError] = useState(null);
   const [credentials, setCredentials] = useState({
+    // state to store username and password
     username: "",
     password: "",
   });
-  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false); // state to check if snackbar is open
+
+  const navigate = useNavigate(); // hook to navigate to different routes
 
   const handleChanges = (e) => {
     setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value,
+      ...credentials, // spread the existing credentials
+      [e.target.name]: e.target.value, // update the state with the new values
     });
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setError(null);
+    setError(null); // reset the error
     // check whether the user is logging in or signing up
     if (isLogin) {
       // login
-      console.log("logging in", credentials);
-      // fetch to login endpoint
+      // fetch to login endpoint with credentials
       fetch("/api/login", {
         method: "POST",
         headers: {
@@ -44,23 +49,21 @@ export default function LoginSignUp() {
         },
         body: JSON.stringify(credentials),
       })
-        .then((res) => res.json())
+        .then((res) => res.json()) // convert response to json
         .then((data) => {
           if (data.error) {
-            setError(data.error);
-            return;
+            // if there is an error
+            setError(data.error); // set the error
+            return; // return
           }
-          console.log("data: ", data);
           // save token to local storage
           sessionStorage.setItem("token", data.token);
-          // navigate to the homepage
-          console.log("navigate to homepage");
 
+          // navigate to the homepage
           navigate("/");
         });
     } else {
       // sign up
-      console.log("signing up", credentials);
       // fetch to signup endpoint
       fetch("/api/signup", {
         method: "POST",
@@ -69,9 +72,17 @@ export default function LoginSignUp() {
         },
         body: JSON.stringify(credentials),
       })
-        .then((res) => res.json())
+        .then((res) => res.json()) // convert response to json
         .then((data) => {
-          console.log(data);
+          if (data.error) {
+            // if there is an error
+            setError(data.error); // set the error
+            return;
+          }
+
+          // set snackbar to open
+          setOpen(true);
+
           // navigate to the login page
           setIsLogin(true);
           navigate("/login");
@@ -94,7 +105,11 @@ export default function LoginSignUp() {
         }}
       >
         <Typography component="h1" variant="h5">
-          {isLogin ? "Login" : "Sign Up"}
+          {
+            isLogin
+              ? "Login"
+              : "Sign Up" /* check if user is logging in or signing up */
+          }
         </Typography>
         <Box
           component="form"
@@ -139,21 +154,27 @@ export default function LoginSignUp() {
             }}
             onClick={handleLogin}
           >
-            {isLogin ? "Login" : "Sign Up"}
+            {
+              isLogin
+                ? "Login"
+                : "Sign Up" /* check if user is logging in or signing up */
+            }
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link to="#" variant="body2" onClick={() => setIsLogin(!isLogin)}>
-                {isLogin
-                  ? "Don't have an account? Sign Up"
-                  : "Already have an account? Login"}
+                {
+                  isLogin
+                    ? "Don't have an account? Sign Up"
+                    : "Already have an account? Login" /* check if user is logging in or signing up */
+                }
               </Link>
             </Grid>
             {error && (
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Typography variant="body2" color="error">
-                    {error}
+                    {error /* display error if there is one */}
                   </Typography>
                 </Grid>
               </Grid>
@@ -161,6 +182,21 @@ export default function LoginSignUp() {
           </Grid>
         </Box>
       </Box>
+      {/* Snackbar to cue user that account was created */}
+      <Snackbar
+        open={open}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={4000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert
+          onClose={() => setOpen(false)}
+          severity="info"
+          sx={{ width: "100%" }}
+        >
+          Account created successfully! Log in to continue.
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

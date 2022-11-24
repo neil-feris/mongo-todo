@@ -16,21 +16,6 @@ export const theme = createTheme({
     success: lime,
   },
   components: {
-    MuiCardHeader: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#f5f5f5",
-        },
-        title: {
-          fontFamily: "Sriracha",
-          fontWeight: 500,
-        },
-        subheader: {
-          fontFamily: "Roboto Mono",
-          fontWeight: 500,
-        },
-      },
-    },
     MuiTypography: {
       styleOverrides: {
         body2: {
@@ -47,6 +32,21 @@ export const theme = createTheme({
         h4: {
           fontFamily: "Sriracha",
           fontWeight: 500,
+        },
+        h3: {
+          fontFamily: "Sriracha",
+          fontWeight: 500,
+        },
+        h2: {
+          fontFamily: "Sriracha",
+          fontSize: "4.5rem",
+          fontWeight: 500,
+          color: deepPurple[500],
+        },
+        h1: {
+          fontFamily: "Sriracha",
+          fontWeight: 500,
+          color: deepPurple[500],
         },
       },
     },
