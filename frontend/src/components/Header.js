@@ -10,7 +10,7 @@ import {
   Fade,
   Slide,
   Grow,
-  Snackbar,
+  // Snackbar,
   IconButton,
   Button,
   LinearProgress,
@@ -21,18 +21,27 @@ import CloseIcon from "@mui/icons-material/Close";
 // return MUI AppBar component with title centered
 const Header = () => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [openSnackBar, setOpenSnackBar] = React.useState(true); // for Snackbar
+  // const [openSnackBar, setOpenSnackBar] = React.useState(true); // for Snackbar
   const [openAlert, setOpenAlert] = React.useState(true); // for Alert
   const navigate = useNavigate();
 
   const handleLogin = () => {
     if (loggedIn) {
-      // setLoggedIn(false);
+      setLoggedIn(false);
       sessionStorage.removeItem("token"); // remove token from session storage
+      
       console.log("navigate to login page", loggedIn);
       navigate("/login");
-    } else {
-      navigate("/");
+    } else if (!loggedIn) {
+      // check if token exists in session storage
+      if (sessionStorage.getItem("token")) {
+        setLoggedIn(true);
+        console.log("navigate to home page", loggedIn);
+        navigate("/");
+      } else {
+        console.log("navigate to login page", loggedIn);
+        navigate("/login");
+      }
     }
   };
 
@@ -46,11 +55,11 @@ const Header = () => {
           {/* if loggedIn */}
           {loggedIn ? (
             <Button color="inherit" onClick={handleLogin}>
-              Login
+              Logout
             </Button>
           ) : (
             <Button color="inherit" onClick={handleLogin}>
-              Logout
+              Login
             </Button>
           )}
         </Toolbar>
@@ -77,9 +86,9 @@ const Header = () => {
         </Alert>
       </Fade>
 
-      <Snackbar
+      {/* <Snackbar
         open={openSnackBar}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={() => setOpenSnackBar(false)}
       >
         <Alert
@@ -92,7 +101,7 @@ const Header = () => {
       </Snackbar>
       <Button variant="contained" onClick={() => setOpenSnackBar(true)}>
         Reopen
-      </Button>
+      </Button> */}
     </div>
   );
 };

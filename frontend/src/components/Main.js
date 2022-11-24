@@ -20,15 +20,8 @@ export default function Main() {
 
   // check if token is in local storage
   const token = sessionStorage.getItem("token");
-  
-  
+
   useEffect(() => {
-    // check if token is in local storage
-    // if it is not, redirect to login page
-    if (!token) {
-      // render link to login page
-      return <Navigate to="/login" />;
-    }
     // fetch the todo list from the backend
     fetch("/api/todos", {
       headers: {

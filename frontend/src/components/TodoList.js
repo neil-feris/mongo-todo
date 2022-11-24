@@ -7,6 +7,9 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 
 export default function TodoList({ todos }) {
+  if (!todos.length) {
+    return <h3>No Todos Yet</h3>;
+  }
   return (
     <Box sx={{ width: "100%", maxWidth: 480, bgcolor: "background.paper" }}>
       <List aria-label="todos">
