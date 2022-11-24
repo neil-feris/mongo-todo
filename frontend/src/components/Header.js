@@ -1,47 +1,35 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Alert,
-  AlertTitle,
-  Collapse,
-  Fade,
-  Slide,
-  Grow,
-  // Snackbar,
-  IconButton,
-  Button,
-  LinearProgress,
-  Backdrop,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 
 // return MUI AppBar component with title centered
 const Header = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  // const [openSnackBar, setOpenSnackBar] = React.useState(true); // for Snackbar
-  const [openAlert, setOpenAlert] = React.useState(true); // for Alert
+  const [authenticated, setAuthenticated] = useState(false);
+
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    // check if user is authenticated
+    if (token) {
+      setAuthenticated(true);
+
+      console.log("authenticated");
+    } else {
+      setAuthenticated(false);
+      console.log("not authenticated");
+    }
+  }, [authenticated, token]);
 
   const handleLogin = () => {
-    if (loggedIn) {
-      setLoggedIn(false);
+    if (authenticated) {
+      setAuthenticated(false);
       sessionStorage.removeItem("token"); // remove token from session storage
-      
-      console.log("navigate to login page", loggedIn);
+
+      console.log("navigate to login page", authenticated);
       navigate("/login");
-    } else if (!loggedIn) {
-      // check if token exists in session storage
-      if (sessionStorage.getItem("token")) {
-        setLoggedIn(true);
-        console.log("navigate to home page", loggedIn);
-        navigate("/");
-      } else {
-        console.log("navigate to login page", loggedIn);
-        navigate("/login");
-      }
+    } else {
+      navigate("/login");
     }
   };
 
@@ -52,8 +40,8 @@ const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             What to DO?
           </Typography>
-          {/* if loggedIn */}
-          {loggedIn ? (
+          {/* if authenticated */}
+          {authenticated ? (
             <Button color="inherit" onClick={handleLogin}>
               Logout
             </Button>
@@ -64,44 +52,6 @@ const Header = () => {
           )}
         </Toolbar>
       </AppBar>
-      <Fade in={openAlert} easing="ease-in" timeout={300}>
-        <Alert
-          variant="filled"
-          severity="info"
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setOpenAlert(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
-          <AlertTitle>Info</AlertTitle>
-          This is a demo app for <strong>What to DO?</strong>
-        </Alert>
-      </Fade>
-
-      {/* <Snackbar
-        open={openSnackBar}
-        autoHideDuration={2000}
-        onClose={() => setOpenSnackBar(false)}
-      >
-        <Alert
-          onClose={() => setOpenSnackBar(false)}
-          severity="info"
-          sx={{ width: "100%" }}
-        >
-          This is a demo app for <strong>What to DO?</strong>
-        </Alert>
-      </Snackbar>
-      <Button variant="contained" onClick={() => setOpenSnackBar(true)}>
-        Reopen
-      </Button> */}
     </div>
   );
 };

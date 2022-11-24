@@ -1,7 +1,6 @@
 // Renders the main page of the app
 
 import React, { useState, useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -22,22 +21,31 @@ export default function Main() {
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
-    // fetch the todo list from the backend
-    fetch("/api/todos", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setTodos(data);
-      });
+    if (token) {
+      // fetch the todo list from the backend
+      fetch("/api/todos", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setTodos(data);
+        });
+    }
   }, [todos]);
 
   const handleAddTodo = (e) => {
     e.preventDefault();
+    // if not logged in, show error
+    if (!token) {
+      setErrors("You must be logged in to add a todo");
+      return;
+    }
+
     // if the todo is empty, return
     if (!newTodo) return;
+
     // send a POST request to the backend to add a new todo
     fetch("/api/todos/add/", {
       method: "POST",
@@ -100,7 +108,16 @@ export default function Main() {
       <Box
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        {todos && <TodoList todos={todos} />}
+        {token && todos && <TodoList todos={todos} />}
+      </Box>
+      <Box
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        {errors && (
+          <Typography variant="h6" color="error">
+            {errors}
+          </Typography>
+        )}
       </Box>
     </Container>
   );
